@@ -13,12 +13,13 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 set(TS_FILES project_driver_en_GB.ts)
-
+set(CMAKE_AUTORCC ON)
 set(PROJECT_SOURCES
         main.cpp
         project_driver.cpp
         project_driver.h
         project_driver.ui
+        r1.qrc
         ${TS_FILES}
 )
 

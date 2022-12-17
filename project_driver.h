@@ -15,6 +15,17 @@ public:
     project_driver(QWidget *parent = nullptr);
     ~project_driver();
 
+private slots:
+    void on_pushButton_clicked();
+
+    void on_swfm_currentIndexChanged(int index);
+
+    void on_irpsugg_clicked();
+
+    void on_ilrippslider_sliderMoved(int position);
+
+    void on_swf_valueChanged(double arg1);
+
 private:
     Ui::project_driver *ui;
 };
