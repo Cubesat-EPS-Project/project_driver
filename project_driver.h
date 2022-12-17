@@ -26,6 +26,10 @@ private slots:
 
     void on_swf_valueChanged(double arg1);
 
+    void on_horizontalSlider_sliderMoved(int position);
+
+    void on_designbtn_clicked();
+
 private:
     Ui::project_driver *ui;
 };

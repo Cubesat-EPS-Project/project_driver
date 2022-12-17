@@ -22,10 +22,14 @@ double duty=0;
 double iomax1=-1;
 double hiomax=77.0;
 double liomax=0;
-double iripple=0.0;
+double iripple=1.0;
 double swf=0;
+double capripp=1.0;
 int swmul=1000;
 int mul=1000;
+double eff=100.0;
+double buckindc=-1.0;
+double buckcap=-1.0;
 project_driver::project_driver(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::project_driver)
@@ -43,10 +47,10 @@ void project_driver::on_pushButton_clicked()
 {
     vin1=ui->vin->text().toDouble();
     vout1=ui->vout->text().toDouble();
-    duty=vout1/vin1;
-    QString dutyst = QString::number(duty);
+    duty=vout1/(vin1*(eff/100));
+    //QString dutyst = QString::number(duty);
     ui->lcdNumber->display(duty);
-    ui->duty->setText(dutyst);
+    //ui->duty->setText(dutyst);
 }
 
 
@@ -99,5 +103,27 @@ void project_driver::on_swf_valueChanged(double arg1)
 
     ui->swf_2->setText(QString::number(mul*arg1));
 
+}
+
+
+void project_driver::on_horizontalSlider_sliderMoved(int position)
+{
+    eff=(double)position/10;
+    ui->lcdNumber_2->display(eff);
+}
+
+
+void project_driver::on_designbtn_clicked()
+{
+    vin1=ui->vin->text().toDouble();
+    vout1=ui->vout->text().toDouble();
+    capripp=ui->vripp->text().toDouble();
+    duty=vout1/(vin1*(eff/100));
+    on_pushButton_clicked();
+    buckindc=(vin1*duty*(1-duty))/(swmul*iripple);
+    ui->indcbk->setText(QString::number(buckindc));
+
+    buckcap=(vout1*(1-duty))/(8*buckindc*capripp*swmul*swmul);
+    ui->capval->setText(QString::number(buckcap));
 }
 
