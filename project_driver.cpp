@@ -77,6 +77,7 @@ void project_driver::on_swfm_currentIndexChanged(int index)
         swmul=1000*swf;
         ui->swf_2->setText(QString::number(swmul));
     }
+     ui->statusbar->showMessage("Ready");
 }
 
 
@@ -122,6 +123,7 @@ void project_driver::on_designbtn_clicked()
     vout1=ui->vout->text().toDouble();
     capripp=ui->vripp->text().toDouble();
     swf=ui->swf->text().toDouble();
+    ui->statusbar->showMessage("Calculating duty...");
     if(indexsw==0)
     {
         swmul=1000*swf;
@@ -140,12 +142,15 @@ void project_driver::on_designbtn_clicked()
         ui->swf_2->setText(QString::number(swmul));
     }
     duty=vout1/(vin1*(eff/100));
+
     on_pushButton_clicked();
+    ui->statusbar->showMessage("Calculating inductor value...");
     buckindc=(vin1*duty*(1-duty))/(swmul*iripple);
     ui->indcbk->setText(QString::number(buckindc));
-
+    ui->statusbar->showMessage("Calculating capacitor value...");
     buckcap=(vout1*(1-duty))/(8*buckindc*capripp*swmul*swmul);
     ui->capval->setText(QString::number(buckcap));
+    ui->statusbar->showMessage("Done.");
 }
 
 
@@ -153,6 +158,7 @@ void project_driver::on_pushButton_2_clicked()
 {
     QString indc1buk=QString::number(buckindc);
     clipboard->setText(indc1buk);
+    ui->statusbar->showMessage("Copied to clipboard!");
     //ui->indcbk->copy();
 }
 
@@ -161,6 +167,7 @@ void project_driver::on_pushButton_3_clicked()
 {
     QString capvalbuck=QString::number(buckcap);
     clipboard->setText(capvalbuck);
+    ui->statusbar->showMessage("Copied to clipboard!");
     //ui->capval->copy();
 }
 
