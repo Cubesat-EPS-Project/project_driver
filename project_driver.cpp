@@ -14,6 +14,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QTextCursor>
+#include <QClipboard>
 #include <QMessageBox>
 using namespace std;
 double vin1=0;
@@ -27,6 +28,7 @@ double swf=0;
 double capripp=1.0;
 int swmul=1000;
 int mul=1000;
+double indexsw=-1;
 double eff=100.0;
 double buckindc=-1.0;
 double buckcap=-1.0;
@@ -36,6 +38,7 @@ project_driver::project_driver(QWidget *parent)
 {
     ui->setupUi(this);
 }
+QClipboard *clipboard = QApplication::clipboard();
 
 project_driver::~project_driver()
 {
@@ -55,7 +58,7 @@ void project_driver::on_pushButton_clicked()
 
 
 void project_driver::on_swfm_currentIndexChanged(int index)
-{
+{   indexsw=index;
     swf=ui->swf->text().toDouble();
     if(index==0)
     {
@@ -118,6 +121,24 @@ void project_driver::on_designbtn_clicked()
     vin1=ui->vin->text().toDouble();
     vout1=ui->vout->text().toDouble();
     capripp=ui->vripp->text().toDouble();
+    swf=ui->swf->text().toDouble();
+    if(indexsw==0)
+    {
+        swmul=1000*swf;
+        mul=1000;
+        ui->swf_2->setText(QString::number(swmul));
+    }
+    if(indexsw==1)
+    {
+        swmul=1000000*swf;
+        mul=1000000;
+        ui->swf_2->setText(QString::number(swmul));
+    }
+    if(indexsw==-1)
+    {
+        swmul=1000*swf;
+        ui->swf_2->setText(QString::number(swmul));
+    }
     duty=vout1/(vin1*(eff/100));
     on_pushButton_clicked();
     buckindc=(vin1*duty*(1-duty))/(swmul*iripple);
@@ -125,5 +146,21 @@ void project_driver::on_designbtn_clicked()
 
     buckcap=(vout1*(1-duty))/(8*buckindc*capripp*swmul*swmul);
     ui->capval->setText(QString::number(buckcap));
+}
+
+
+void project_driver::on_pushButton_2_clicked()
+{
+    QString indc1buk=QString::number(buckindc);
+    clipboard->setText(indc1buk);
+    //ui->indcbk->copy();
+}
+
+
+void project_driver::on_pushButton_3_clicked()
+{
+    QString capvalbuck=QString::number(buckcap);
+    clipboard->setText(capvalbuck);
+    //ui->capval->copy();
 }
 

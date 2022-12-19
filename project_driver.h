@@ -2,7 +2,7 @@
 #define PROJECT_DRIVER_H
 
 #include <QMainWindow>
-
+#include <QClipboard>
 QT_BEGIN_NAMESPACE
 namespace Ui { class project_driver; }
 QT_END_NAMESPACE
@@ -29,6 +29,10 @@ private slots:
     void on_horizontalSlider_sliderMoved(int position);
 
     void on_designbtn_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
 
 private:
     Ui::project_driver *ui;
