@@ -34,6 +34,10 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    double boostswfreq();
+
+    void on_boostfreqmul_currentIndexChanged(int index);
+
 private:
     Ui::project_driver *ui;
 };

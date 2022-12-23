@@ -171,3 +171,21 @@ void project_driver::on_pushButton_3_clicked()
     //ui->capval->copy();
 }
 
+
+double boostvin=0.0;
+double boostvout=0.0;
+double boostfreq=0.0;
+int boostfreqmul=1000;
+double boostirpp=0.0;
+double boostvripp=0.0;
+double boostfrequency=0.0;
+
+
+
+void project_driver::on_boostfreqmul_currentIndexChanged(int index)
+{
+    boostfreq=ui->boostfreq->text().toDouble();
+    boostfrequency=boostfreqmul*boostfreq;
+    ui->statusbar->showMessage("Calculating duty...");
+}
+
