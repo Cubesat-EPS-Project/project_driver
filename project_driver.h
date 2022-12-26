@@ -34,9 +34,13 @@ private slots:
 
     void on_pushButton_3_clicked();
 
-    double boostswfreq();
-
     void on_boostfreqmul_currentIndexChanged(int index);
+
+    void on_boostfreq_valueChanged(double arg1);
+
+    void on_boosteff_sliderMoved(int position);
+
+    void on_pushButton_7_clicked();
 
 private:
     Ui::project_driver *ui;

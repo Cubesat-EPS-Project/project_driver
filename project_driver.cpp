@@ -179,13 +179,58 @@ int boostfreqmul=1000;
 double boostirpp=0.0;
 double boostvripp=0.0;
 double boostfrequency=0.0;
-
+double boosteff=100.0;
+double boostduty=0.0;
 
 
 void project_driver::on_boostfreqmul_currentIndexChanged(int index)
 {
+
     boostfreq=ui->boostfreq->text().toDouble();
-    boostfrequency=boostfreqmul*boostfreq;
+    if(index==0)
+    {
+
+        boostfreqmul=1000;
+
+    }
+    if(index==1)
+    {
+
+        boostfreqmul=1000000;
+
+    }
+    if(index==-1)
+    {
+
+    }
     ui->statusbar->showMessage("Calculating duty...");
+    boostfrequency=boostfreqmul*boostfreq;
+    ui->boostswfdisp->setText(QString::number(boostfrequency));
+}
+
+
+void project_driver::on_boostfreq_valueChanged(double arg1)
+{
+    ui->statusbar->showMessage("Calculating duty...");
+    boostfreq=arg1;
+    boostfrequency=boostfreqmul*boostfreq;
+    ui->boostswfdisp->setText(QString::number(boostfrequency));
+}
+
+
+void project_driver::on_boosteff_sliderMoved(int position)
+{
+    boosteff=(double)position/10;
+    ui->boosteffdisp->display(boosteff);
+}
+
+
+void project_driver::on_pushButton_7_clicked()
+{
+    on_boostfreqmul_currentIndexChanged(-1);
+    boostvin=ui->boostvin->text().toDouble();
+    boostvout=ui->boostvout->text().toDouble();
+    boostduty=1-((boostvin*(boosteff/100))/boostvout);
+    ui->boostdutydisp->display(boostduty);
 }
 
