@@ -171,6 +171,39 @@ void project_driver::on_pushButton_3_clicked()
     ui->statusbar->showMessage("Copied to clipboard!");
     //ui->capval->copy();
 }
+void project_driver::on_clrbtn_clicked()
+{
+    vin1=0;
+    vout1=0;
+    duty=0;
+    iomax1=-1;
+    hiomax=77.0;
+    liomax=0;
+    iripple=1.0;
+    swf=0;
+    capripp=1.0;
+    swmul=1000;
+    mul=1000;
+    indexsw=-1;
+    eff=100.0;
+    buckindc=-1.0;
+    buckcap=-1.0;
+
+    ui->indcbk->setText(QString::number(0));
+    ui->capval->setText(QString::number(0));
+    ui->swf_2->setText(QString::number(0));
+    ui->lcdNumber_2->display(100);
+    ui->lcdNumber->display(0);
+    ui->vin->setText(QString::number(0));
+    ui->vout->setText(QString::number(0));
+    ui->vripp->setText(QString::number(0));
+    ui->iripp->setText(QString::number(0));
+    ui->iomax->setText(QString::number(0));
+    ui->swf->setValue(0);
+}
+
+
+
 
 
 double boostvin=0.0;
@@ -314,4 +347,7 @@ void project_driver::on_capcpybt_clicked()
     clipboard->setText(capboostclip);
     ui->statusbar->showMessage("Copied to clipboard!");
 }
+
+
+
 

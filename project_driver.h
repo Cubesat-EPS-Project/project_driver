@@ -54,6 +54,8 @@ private slots:
 
     void on_capcpybt_clicked();
 
+    void on_clrbtn_clicked();
+
 private:
     Ui::project_driver *ui;
 };
