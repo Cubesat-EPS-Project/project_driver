@@ -2,4 +2,7 @@
     <qresource prefix="/new/prefix1">
         <file>Buck_converter.svg</file>
     </qresource>
+    <qresource prefix="/">
+        <file>Boost_converter.svg</file>
+    </qresource>
 </RCC>

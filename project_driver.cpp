@@ -85,7 +85,7 @@ void project_driver::on_irpsugg_clicked()
 {
     iomax1=ui->iomax->text().toDouble();
 
-    liomax=0.2*iomax1*1000000;
+    liomax=0.1*iomax1*1000000;
     hiomax=0.4*iomax1*1000000;
     ui->ilrippslider->setSingleStep(10000);
     ui->ilrippslider->setMinimum((int)liomax);
@@ -121,6 +121,7 @@ void project_driver::on_designbtn_clicked()
 {
     vin1=ui->vin->text().toDouble();
     vout1=ui->vout->text().toDouble();
+    iripple=ui->iripp->text().toDouble();
     capripp=ui->vripp->text().toDouble();
     swf=ui->swf->text().toDouble();
     ui->statusbar->showMessage("Calculating duty...");
@@ -145,7 +146,7 @@ void project_driver::on_designbtn_clicked()
 
     on_pushButton_clicked();
     ui->statusbar->showMessage("Calculating inductor value...");
-    buckindc=(vin1*duty*(1-duty))/(swmul*iripple);
+    buckindc=(vout1*(1-duty))/(swmul*iripple);
     ui->indcbk->setText(QString::number(buckindc));
     ui->statusbar->showMessage("Calculating capacitor value...");
     buckcap=(vout1*(1-duty))/(8*buckindc*capripp*swmul*swmul);
@@ -181,6 +182,9 @@ double boostvripp=0.0;
 double boostfrequency=0.0;
 double boosteff=100.0;
 double boostduty=0.0;
+double boostmaxcurr=0.0;
+double boostindval=0.0;
+double boostcapval=0.0;
 
 
 void project_driver::on_boostfreqmul_currentIndexChanged(int index)
@@ -203,7 +207,7 @@ void project_driver::on_boostfreqmul_currentIndexChanged(int index)
     {
 
     }
-    ui->statusbar->showMessage("Calculating duty...");
+
     boostfrequency=boostfreqmul*boostfreq;
     ui->boostswfdisp->setText(QString::number(boostfrequency));
 }
@@ -211,7 +215,7 @@ void project_driver::on_boostfreqmul_currentIndexChanged(int index)
 
 void project_driver::on_boostfreq_valueChanged(double arg1)
 {
-    ui->statusbar->showMessage("Calculating duty...");
+
     boostfreq=arg1;
     boostfrequency=boostfreqmul*boostfreq;
     ui->boostswfdisp->setText(QString::number(boostfrequency));
@@ -220,17 +224,94 @@ void project_driver::on_boostfreq_valueChanged(double arg1)
 
 void project_driver::on_boosteff_sliderMoved(int position)
 {
+    ui->statusbar->showMessage("Calculating duty...");
     boosteff=(double)position/10;
     ui->boosteffdisp->display(boosteff);
+    boostvin=ui->boostvin->text().toDouble();
+    boostvout=ui->boostvout->text().toDouble();
+    boostduty=1-((boostvin*(boosteff/100))/boostvout);
+    ui->boostdutydisp->display(boostduty);
+    ui->statusbar->showMessage("Done");
 }
 
 
 void project_driver::on_pushButton_7_clicked()
 {
-    on_boostfreqmul_currentIndexChanged(-1);
+    ui->statusbar->showMessage("Calculating duty...");
+    //on_boostfreqmul_currentIndexChanged(-1);
     boostvin=ui->boostvin->text().toDouble();
     boostvout=ui->boostvout->text().toDouble();
     boostduty=1-((boostvin*(boosteff/100))/boostvout);
     ui->boostdutydisp->display(boostduty);
+    ui->statusbar->showMessage("Done");
+}
+
+
+void project_driver::on_boostirippslider_sliderMoved(int position)
+{
+    boostvin=ui->boostvin->text().toDouble();
+    boostvout=ui->boostvout->text().toDouble();
+    boostmaxcurr=ui->boostmaxcurr->text().toDouble();
+    boostirpp=((double)position/1000.0)*boostmaxcurr*(boostvout/boostvin);
+    ui->boostiripp->setValue(boostirpp);
+}
+
+
+void project_driver::on_pushButton_4_clicked()
+{
+    int position=200;
+    boostvin=ui->boostvin->text().toDouble();
+    boostvout=ui->boostvout->text().toDouble();
+    boostmaxcurr=ui->boostmaxcurr->text().toDouble();
+    boostirpp=((double)position/1000.0)*boostmaxcurr*(boostvout/boostvin);
+    ui->boostiripp->setValue(boostirpp);
+    ui->boostirippslider->setSliderPosition(200);
+}
+
+
+void project_driver::on_boostmaxcurr_editingFinished()
+{
+    int position=200;
+    boostvin=ui->boostvin->text().toDouble();
+    boostvout=ui->boostvout->text().toDouble();
+    boostmaxcurr=ui->boostmaxcurr->text().toDouble();
+    boostirpp=((double)position/1000.0)*boostmaxcurr*(boostvout/boostvin);
+    ui->boostiripp->setValue(boostirpp);
+    ui->boostirippslider->setSliderPosition(200);
+}
+
+
+void project_driver::on_pushButton_6_clicked()
+{
+    boostvin=ui->boostvin->text().toDouble();
+    boostvout=ui->boostvout->text().toDouble();
+    boostmaxcurr=ui->boostmaxcurr->text().toDouble();
+    boostirpp=ui->boostiripp->text().toDouble();
+    boostvripp=ui->boostvripp->text().toDouble();
+    on_pushButton_7_clicked();
+
+
+    boostindval=(boostvin*(boostvout-boostvin))/(boostirpp*boostfrequency*boostvout);
+    ui->boostindcval->setText(QString::number(boostindval));
+
+
+    boostcapval=(boostmaxcurr*boostduty)/(boostfrequency*boostvripp);
+    ui->boostcapval->setText(QString::number(boostcapval));
+}
+
+
+void project_driver::on_indccpybt_clicked()
+{
+    QString indvalboostclip=QString::number(boostindval);
+    clipboard->setText(indvalboostclip);
+    ui->statusbar->showMessage("Copied to clipboard!");
+}
+
+
+void project_driver::on_capcpybt_clicked()
+{
+    QString capboostclip=QString::number(boostcapval);
+    clipboard->setText(capboostclip);
+    ui->statusbar->showMessage("Copied to clipboard!");
 }
 

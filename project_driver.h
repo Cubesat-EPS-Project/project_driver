@@ -42,6 +42,18 @@ private slots:
 
     void on_pushButton_7_clicked();
 
+    void on_boostirippslider_sliderMoved(int position);
+
+    void on_pushButton_4_clicked();
+
+    void on_boostmaxcurr_editingFinished();
+
+    void on_pushButton_6_clicked();
+
+    void on_indccpybt_clicked();
+
+    void on_capcpybt_clicked();
+
 private:
     Ui::project_driver *ui;
 };
