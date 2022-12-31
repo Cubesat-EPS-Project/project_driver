@@ -1,3 +1,4 @@
 # Buck and Boost converter designer
--Voltage ripple suggesstion pending
+-Voltage ripple suggestion pending
+
 -Buck-boost pending
